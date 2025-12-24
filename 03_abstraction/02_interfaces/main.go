@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"unsafe"
+)
 
 // DEEP DIVE: Interfaces
 // Interfaces are implicitly implemented. No "implements" keyword.
@@ -19,7 +22,7 @@ func (d *Dog) Speak() string {
 		return "<nil dog>"
 	}
 	return "Woof!"
-}
+} 
 
 type Cat struct {}
 func (c Cat) Speak() string { return "Meow" }
@@ -69,6 +72,39 @@ func main() {
 	// Safe to call method because *Dog implementation handles nil receiver!
 	fmt.Println("Result:", s1.Speak()) 
 	fmt.Println("Result:", s1.Speak()) 
+
+	// =========================================================================
+	// 5. DEEP DIVE: Interface Internals (Runtime View)
+	// =========================================================================
+	// Interfaces are just 2 words in memory: (TablePtr, DataPtr).
+	// Let's look at them using unsafe!
+
+	fmt.Println("\n--- Deep Dive: Interface Internals ---")
+	
+	// Create an interface
+	var s2 Speaker = &Dog{"Buddy"}
+	
+	// Define a struct that matches the runtime layout of a non-empty interface (iface)
+	// src/runtime/runtime2.go: type iface struct { tab *itab; data unsafe.Pointer }
+	type ifaceHeader struct {
+		Tab  uintptr
+		Data uintptr
+	}
+	
+	// Cast the interface variable to our header struct
+	// We get the address of s2, cast to unsafe.Pointer, then to *ifaceHeader
+	ptr := (*ifaceHeader)(unsafe.Pointer(&s2))
+	
+	fmt.Printf("Interface Variable 's2' (Address: %p):\n", &s2)
+	fmt.Printf("  [Word 1] itab (Method Table) : %#x\n", ptr.Tab) // Points to function list + type info
+	fmt.Printf("  [Word 2] data (Instance Ptr) : %#x\n", ptr.Data) // Points to the Dog struct
+	
+	// Verify Data ptr matches the actual Dog
+	dogPtr := s2.(*Dog)
+	fmt.Printf("  Actual Dog Pointer           : %p\n", dogPtr)
+	
+	// Visualizing the Dispatch
+	// s2.Speak() -> essentially does: ptr.Tab.Fun[0](ptr.Data)
 }
 
 /*
