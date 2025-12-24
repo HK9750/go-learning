@@ -78,6 +78,19 @@ func main() {
 	// =========================================================================
 	// Interfaces are just 2 words in memory: (TablePtr, DataPtr).
 	// Let's look at them using unsafe!
+	//
+	// VISUALIZATION (Interface Layout):
+	// [ s2 Interface Variable ]
+	// +-----------------------------+       +---------------------+
+	// | Tab  (Type Info/Methods)    | ----> | Itab (Dog Info)     |
+	// +-----------------------------+       | - Type: *Dog        |
+	// | Data (Concrete Instance Ptr)| --+   | - Methods: [Speak]  |
+	// +-----------------------------+   |   +---------------------+
+	//                                   |
+	//                                   |   +---------------------+
+	//                                   +-> | Dog Struct Instance |
+	//                                       | Name: "Buddy"       |
+	//                                       +---------------------+
 
 	fmt.Println("\n--- Deep Dive: Interface Internals ---")
 	

@@ -59,8 +59,11 @@ func main() {
 	/*
 	EXPECTED BEHAVIOR (GMP):
 	Because we have P=1, they cannot run in parallel.
-	A runs -> A YIELD -> Scheduler puts A in Global/Local queue.
-	Scheduler picks B.
-	B runs -> ...
+	
+	VISUALIZATION (Time Slicing):
+	Time --->
+	[ P1 ] : [ A ] [ A ] [ A ] (Yield) -> [ B ] [ B ] [ B ] (Yield) -> [ A ] ...
+	         |
+	         Global/Local Queue logic manages this "Context Switch".
 	*/
 }

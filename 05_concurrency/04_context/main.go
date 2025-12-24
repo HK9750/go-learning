@@ -9,7 +9,17 @@ import (
 // DEEP DIVE: Context
 // Context carries deadlines, cancellation signals, and request-scoped values.
 // Rule 1: Always pass context as the first argument to functions (ctx context.Context).
+// Rule 1: Always pass context as the first argument to functions (ctx context.Context).
 // Rule 2: Never store context in a struct; pass it explicitly.
+//
+// VISUALIZATION (Cancellation Propagation):
+// [ Background ] (Root)
+//       |
+//       +-> [ WithCancel (ctx1) ] --+-- [ Worker A ]
+//       |      ^ Cancel triggers    |
+//       |                           +-- [ Worker B ]
+//       |
+//       +-> [ WithTimeout (ctx2) ] ---> [ DB Query ] (Cancels on timeout)
 
 func main() {
 	// 1. WithCancel (Manually trigger cancellation)

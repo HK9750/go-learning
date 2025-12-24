@@ -58,6 +58,14 @@ func main() {
 	if n > 5 {
 		fmt.Println("\n--- Shadowing Zone ---")
 		n := 5 // New variable 'n' shadows the outer 'n'
+		
+		// MEMORY VISUALIZATION:
+		// Stack Frame:
+		// | ...            |
+		// | 0xAddr1: 10    | <- Outer 'n' (still exists, but hidden)
+		// | 0xAddr2: 5     | <- Inner 'n' (active in this scope)
+		// | ...            |
+		
 		fmt.Printf("Inner n: %d (Address: %p)\n", n, &n)
 		n++ // Affects inner 'n' only
 	}
@@ -65,6 +73,11 @@ func main() {
 	// Notice the memory addresses are different!
 
 	// 6. Type Aliasing vs Type Definition
+	//
+	// VISUALIZATION:
+	// type UserID int      ->  [ UserID Type ] --(distinct from)--> [ int Type ]
+	// type LegacyID = int  ->  [ LegacyID Tag ] ------------------> [ int Type ] (Same thing)
+	
 	type UserID int         // NEW TYPE: 'UserID' is distinct from 'int'.
 	type LegacyID = int     // ALIAS: 'LegacyID' is just another name for 'int'.
 

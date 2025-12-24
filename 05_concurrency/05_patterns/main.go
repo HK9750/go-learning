@@ -13,6 +13,11 @@ import (
 func main() {
 	// --- PATTERN 1: WORKER POOL ---
 	// Distributes jobs N workers.
+	//
+	// VISUALIZATION:
+	// [ Jobs Channel ] -> [ Worker 1 ] -> [ Results Channel ]
+	//                  -> [ Worker 2 ] ->
+	//                  -> [ Worker 3 ] ->
 	
 	const numJobs = 5
 	const numWorkers = 3

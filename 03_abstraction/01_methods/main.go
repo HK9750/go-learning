@@ -5,6 +5,16 @@ import "fmt"
 // DEEP DIVE: Methods
 // A method is just a function with a special "receiver" argument.
 // Receiver can be (T) or (*T).
+//
+// VISUALIZATION (Method Sets):
+// +----------------+      +-------------------------+
+// |  Variable u    |      |  Method Set             |
+// +----------------+      +-------------------------+
+// |  u of type T   | ---> |  Receivers (t T)        |
+// +----------------+      +-------------------------+
+// |  u of type *T  | ---> |  Receivers (t T)        |
+// |                |      |  Receivers (t *T)       |
+// +----------------+      +-------------------------+
 
 type User struct {
 	Name string

@@ -15,6 +15,16 @@ import (
 // The Go Scheduler maps G -> M -> CPU via P.
 // When a G blocks (e.g. syscall), the P detaches from M and moves to another M.
 // This is "User Space Scheduling" (M:N scheduling).
+//
+// VISUALIZATION (GMP):
+// [ Global Queue ]  <- Waiting Goroutines
+//
+//      P1 (Local Q)      P2 (Local Q)
+//      |   [ G1 ]        |   [ G4 ]
+//      v   [ G2 ]        v   [ G5 ]
+//     [M1] (Thread)     [M2] (Thread)
+//      |                 |
+//     (CPU Core 1)      (CPU Core 2)
 
 func main() {
 	// 1. GOMAXPROCS

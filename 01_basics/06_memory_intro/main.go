@@ -7,6 +7,17 @@ import "fmt"
 
 // Stack: Fast allocation/deallocation (moving a pointer). Local variables usually live here.
 // Heap: Slower. Shared variables, dynamic size, or those that "escape" live here. GC scans this.
+//
+// VISUALIZATION:
+// +----------------+        +--------------------------+
+// |     STACK      |        |           HEAP           |
+// | [ func main ]  |        |  (Garbage Collected)     |
+// | var a = 10     |        |                          |
+// | var b = 20     |        |  [ 0xAlloc1: LargeData ] |
+// +----------------+        |  [ 0xAlloc2: EscapedVar] |
+// | [ func sub  ]  |        +--------------------------+
+// | var x = 5      | <------- (ptr to heap)
+// +----------------+
 
 // 1. Escape Analysis
 // The compiler determines where to store a variable.

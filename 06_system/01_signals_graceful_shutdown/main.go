@@ -14,6 +14,18 @@ import (
 // =========================================================================
 // Production apps must handle SIGINT (Ctrl+C) and SIGTERM (Kubernetes stops).
 // We use a buffered channel to catch these signals.
+//
+// VISUALIZATION (Graceful Flow):
+// [ OS Signal (SIGINT) ] -> [ Go Runtime ] -> [ sigChan ] (Buffered)
+//                                                  |
+//                                                  v
+// [ Main Goroutine ] Unblocks! --------------------+
+//       |
+//       +--> Call cancel() -> [ Context Canceled ]
+//                                     |
+//       +--> [ Workers ] DETECT <-Done() -- stop processing
+//       |
+//       +--> cleanup() -> [ Exit 0 ]
 
 func main() {
 	// 1. Create a channel to listen for signals

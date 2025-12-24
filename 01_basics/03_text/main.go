@@ -8,6 +8,15 @@ import (
 
 // DEEP DIVE: Strings in Go
 // A string is a read-only slice of bytes.
+//
+// MEMORY LAYOUT:
+// String Header (Small struct)      Backing Array (Read-Only)
+// +---------+-----+                 +---+---+---+---+---+
+// | Pointer |  *--+-------------->  | H | e | l | l | o | ...
+// +---------+-----+                 +---+---+---+---+---+
+// | Length  |  5  |
+// +---------+-----+
+//
 // It is NOT necessarily a sequence of characters.
 // This is crucial: strings are immutable. You cannot change s[i].
 

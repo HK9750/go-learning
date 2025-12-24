@@ -9,10 +9,13 @@ import (
 )
 
 // DEEP DIVE: The Initialization Order
-// 1. Importing packages (recursive).
-// 2. Package-level variables are initialized.
-// 3. 'init()' functions are run (we'll see these later).
-// 4. 'main()' function is executed.
+// Go programs start executing at the top of the 'main' package, but there is a
+// strict order of operations before 'main()' is ever called.
+//
+// [ 1. Imports ] -> [ 2. Package-Level Vars ] -> [ 3. init() Functions ] -> [ 4. main() ]
+//      ^                     ^                         ^                       ^
+//      |                     |                         |                       |
+// (Recursive)        (Initialized in order)    (One or more per file)    (Entry Point)
 
 // main is the entry point of the executable.
 // It takes no arguments and returns no values.

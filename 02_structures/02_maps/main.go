@@ -10,14 +10,21 @@ import (
 // O(1) average lookup, O(1) insert, O(1) delete.
 // Internally implemented as "Buckets". Each bucket holds 8 key/value pairs.
 // When buckets overflow, chaining or growing happens.
+//
+// VISUALIZATION (B=2 -> 4 Buckets):
+// [ hmap ] -> [ buckets array ]
+//             |
+//             +-> [ Bucket 0 ] -> [ Tophash | Key1 | Key2.. | Val1 | Val2.. ] -> [ Overflow Bucket ]
+//             +-> [ Bucket 1 ]
+//             +-> [ Bucket 2 ]
+//             +-> [ Bucket 3 ]
 
 func main() {
 	// 1. Initialization
 	var nilMap map[string]int // nil. Reading OK (0), Writing PANIC!
 	// nilMap["key"] = 1 // PANIC: assignment to entry in nil map
-	if nilMap == nil {
-		fmt.Println("Map is nil. Reading returns zero-value:", nilMap["foo"])
-	}
+	// nilMap["key"] = 1 // PANIC: assignment to entry in nil map
+	fmt.Println("Map is nil. Reading returns zero-value:", nilMap["foo"])
 
 	m := make(map[string]int) // Initialized.
 	m["Alice"] = 25

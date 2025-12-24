@@ -4,6 +4,12 @@ import "fmt"
 
 // DEEP DIVE: Generics (Go 1.18+)
 // Parametric polymorphism.
+//
+// VISUALIZATION (Monomorphization at Compile Time):
+// Code: Index[int](...)       Compiler generates -> func Index_int(s []int, x int) ...
+// Code: Index[string](...)    Compiler generates -> func Index_string(s []string, x string) ...
+//
+// Result: No runtime overhead for generics! (Unlike Java Type Erasure)
 
 // 1. Generic Function
 // [T any] is the Type Parameter List.

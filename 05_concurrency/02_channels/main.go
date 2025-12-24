@@ -27,6 +27,12 @@ func main() {
 	fmt.Println("Receiver: Got", msg)
 
 	// 2. Buffered Channel (Asynchronous)
+	// Some buffer space available.
+	//
+	// VISUALIZATION:
+	// Unbuffered: [ Sender ] -> ( Handshake ) -> [ Receiver ] (Coupled)
+	// Buffered  : [ Sender ] -> [ Buf | Buf ] -> [ Receiver ] (Decoupled until full/empty)
+	//
 	// Doesn't block send unless buffer is FULL.
 	// Doesn't block receive unless buffer is EMPTY.
 	bufCh := make(chan int, 2) // Capacity 2

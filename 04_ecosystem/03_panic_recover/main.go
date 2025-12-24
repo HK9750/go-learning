@@ -5,6 +5,20 @@ import "fmt"
 // DEEP DIVE: Panic & Recover
 // Panic is like throwing a RuntimeException. It stops normal flow.
 // Recover is like catch, but ONLY works inside a DEFERRED function.
+//
+// VISUALIZATION (Stack Unwinding):
+// FAIL: panic() called!
+//   |
+//   v
+// [ Stack Frame N   ] -> Deferred functions run? -> NO (Destroyed)
+//   |
+//   v
+// [ ...             ]
+//   |
+//   v
+// [ Stack Frame 1   ] -> defer func() { recover() } -> YES! (Stop unwinding, resume here)
+//   |
+// [ main()          ]
 
 func riskyOperation(i int) {
 	defer func() {

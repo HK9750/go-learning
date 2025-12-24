@@ -12,6 +12,14 @@ import (
 // Fields are aligned in memory based on their size.
 // The CPU accesses memory in words (e.g., 8 bytes on 64-bit machine).
 // Poor ordering of fields creates "Padding" (wasted space).
+//
+// VISUALIZATION (BadStruct):
+// [ Flag (1B) ] [ PADDING (7B) ] [ Value (8B) ] [ Small (1B) ] [ PADDING (7B) ]
+// Total: 24 Bytes (Lots of air!)
+//
+// VISUALIZATION (GoodStruct):
+// [ Value (8B) ] [ Flag (1B) ] [ Small (1B) ] [ PADDING (6B) ]
+// Total: 16 Bytes (Better packing)
 
 type BadStruct struct {
 	Flag    bool    // 1 byte

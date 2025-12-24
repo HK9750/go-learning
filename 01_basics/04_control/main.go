@@ -84,6 +84,13 @@ OuterLoop:
 	// We'll cover this more in Functions, but know that 'defer' schedules a function call
 	// to run immediately before the surrounding function returns.
 	// It's LIFO (Last In First Out).
+	//
+	// VISUALIZATION (Stack):
+	// | 3. Last Defer   |  <- Runs First
+	// | 2. Middle Defer |
+	// | 1. First Defer  |  <- Runs Last
+	// +-----------------+
+	
 	defer fmt.Println("\nThis prints LAST (LIFO)")
 	defer fmt.Println("This prints Second to Last")
 	defer fmt.Println("This prints Second to Last")

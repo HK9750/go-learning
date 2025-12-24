@@ -9,6 +9,13 @@ import (
 
 // DEEP DIVE: Sync Package
 // Synchronization primitives for memory access.
+//
+// VISUALIZATION (Mutex):
+// [ Goroutine A ] -- Lock() --> [ MUTEX (Locked) ]
+//                                     |
+// [ Goroutine B ] -- Lock() --> ( BLOCKED )
+//                                     |
+// [ Goroutine A ] -- Unlock() -> [ MUTEX (Free) ] --> [ Goroutine B resumes ]
 
 func main() {
 	// 1. Mutex (Mutual Exclusion)

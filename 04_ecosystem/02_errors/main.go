@@ -32,6 +32,11 @@ func (e *FileError) Unwrap() error {
 func openConfig() error {
 	// 3. Wrapping Errors (Go 1.13+)
 	// Use %w verb to wrap an error inside another.
+	//
+	// VISUALIZATION (Error Chain):
+	// [ CustomError ] contains -> [ os.PathError ] contains -> [ "item not found" ]
+	//      ^                           ^                          ^
+	//  errors.As? (Yes)           errors.As? (Yes)           errors.Is? (Yes)
 	_, err := os.Open("missing_config.json")
 	if err != nil {
 		// We return a Custom Error wrapping the original os.PathError

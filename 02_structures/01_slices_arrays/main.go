@@ -16,6 +16,16 @@ import (
 //     Len  int     // Number of elements in the slice
 //     Cap  int     // Capacity (elements allocated in underlying array starting from Data)
 // }
+//
+// VISUALIZATION:
+//
+//    Variable 'slice' (Stack)          Underlying Array (Heap/Stack)
+//   +-----------------+               +----+----+----+----+----+
+//   | Ptr: 0xAddr     | ------------> | 10 | 20 | 30 | .. | .. |
+//   | Len: 3          |               +----+----+----+----+----+
+//   | Cap: 5          |               ^              ^
+//   +-----------------+               |              |
+//                                    Head           Cap Limit
 
 func main() {
 	// 1. Array (Value Type)
