@@ -74,7 +74,6 @@ func main() {
 	fmt.Printf("String (%%s): %s\n", s)
 	fmt.Printf("Quoted (%%q): %q\n", s) // Shows escapes like \t
 	fmt.Printf("Hex (%%x): %x\n", s)
-
 	// 6. Pointer
 	// %p   : Base 16 notation with leading 0x
 	fmt.Println("\n--- Pointer ---")

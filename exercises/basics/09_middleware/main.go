@@ -96,7 +96,6 @@ func (s *store) deleteTask(id int) error {
 	return nil
 }
 
-// Handler methods
 
 func (s *store) handleTasks(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
@@ -165,8 +164,6 @@ func (s *store) handleTaskByID(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Helpers
-
 func WriteJson(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
@@ -190,7 +187,6 @@ func getIdFromPath(r *http.Request) (int, error) {
 	return strconv.Atoi(r.PathValue("id"))
 }
 
-// Middleware
 
 func LoggerMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -206,11 +202,9 @@ func LoggerMiddleware(next http.Handler) http.Handler {
 }
 
 func main() {
-	// 1. Setup Logger (JSON for structured logs)
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logger)
 
-	// 2. Configuration
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = ":5000"
@@ -218,20 +212,17 @@ func main() {
 		port = ":" + port
 	}
 
-	// 3. Initialize Store and Router
 	store := GetStore()
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/tasks", store.handleTasks)
 	mux.HandleFunc("/tasks/{id}", store.handleTaskByID)
 
-	// 4. Create Server
-	server := GetServer(mux, port) // Pass mux directly, or wrap with middleware if needed elsewhere
-	// For global middleware, we can wrap the mux:
+	server := GetServer(mux, port) 
 	handler := LoggerMiddleware(mux)
+	// handler := chain(mux,)
 	server.Handler = handler
 
-	// 5. Start Server
 	go func() {
 		slog.Info("server starting", "addr", port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -240,7 +231,6 @@ func main() {
 		}
 	}()
 
-	// 6. Graceful Shutdown
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)
 	<-stop
