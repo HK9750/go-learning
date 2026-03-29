@@ -484,7 +484,7 @@ func (b *Builder) Build() string {
 // -----------------------------------------------------------------------------
 
 func main() {
-	fmt.Println("=== GO METHODS - COMPREHENSIVE GUIDE ===\n")
+	fmt.Println("=== GO METHODS - COMPREHENSIVE GUIDE ===")
 
 	// =========================================================================
 	// DEMO 1: Value vs Pointer Receivers
