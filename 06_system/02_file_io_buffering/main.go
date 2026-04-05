@@ -24,10 +24,10 @@ func main() {
 	// bufio.Writer aggregates writes into 4KB chunks.
 	fmt.Println("Generating test file...")
 	start := time.Now()
-	
+
 	f, _ := os.Create(filename)
 	bw := bufio.NewWriter(f) // 4KB buffer default
-	
+
 	for i := 0; i < linesToWrite; i++ {
 		// Just writing random data
 		bw.WriteString("INFO: This is a log line number ")
@@ -36,9 +36,9 @@ func main() {
 	}
 	bw.Flush() // CRITICAL: Don't forget to flush the last chunk!
 	f.Close()
-	
-	fmt.Printf("File generated in %v. Size: %.2f MB\n", 
-		time.Since(start), 
+
+	fmt.Printf("File generated in %v. Size: %.2f MB\n",
+		time.Since(start),
 		getFileSize(filename))
 
 	// 2. Bad Way: os.ReadFile
@@ -49,26 +49,26 @@ func main() {
 	// 3. Good Way: bufio.Scanner (Streaming)
 	fmt.Println("\nStreaming file line-by-line...")
 	start = time.Now()
-	
+
 	f2, _ := os.Open(filename)
 	defer f2.Close()
-	
+
 	scanner := bufio.NewScanner(f2)
 	// scanner.Buffer(make([]byte, 0, 64*1024), 1024*1024) // Increase buffer if lines > 64KB
-	
+
 	lineCount := 0
 	byteCount := 0
-	
+
 	for scanner.Scan() {
 		line := scanner.Text() // Allocates string. Use scanner.Bytes() to avoid alloc if parsing.
 		lineCount++
 		byteCount += len(line)
-		
-		if lineCount % 20000 == 0 {
+
+		if lineCount%20000 == 0 {
 			fmt.Printf("   Processed %d lines...\n", lineCount)
 		}
 	}
-	
+
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Error:", err)
 	}
@@ -77,6 +77,7 @@ func main() {
 	fmt.Println("Memory usage stays constant regardless of file size!")
 }
 
+// utility function to calculate file in MB
 func getFileSize(name string) float64 {
 	fi, _ := os.Stat(name)
 	return float64(fi.Size()) / 1024 / 1024
