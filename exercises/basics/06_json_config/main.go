@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 type Config struct {
@@ -16,7 +17,7 @@ type Config struct {
 func LoadConfig(path string) (*Config, error) {
 	file, err := os.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode config json: %w", err)
+		return nil, fmt.Errorf("failed to open config file %q: %w", path, err)
 	}
 	defer file.Close()
 
@@ -39,10 +40,29 @@ func LoadConfig(path string) (*Config, error) {
 	return &config, nil
 }
 
-func main() {
-	config, err := LoadConfig("./exercises/06_json_config/config.json")
-	if err != nil {
-		fmt.Println("Error in main", err)
+func defaultConfigPath() string {
+	candidates := []string{
+		"config.json",
+		filepath.Join("basics", "06_json_config", "config.json"),
+		filepath.Join("exercises", "basics", "06_json_config", "config.json"),
 	}
-	fmt.Printf("%T", config)
+
+	for _, path := range candidates {
+		if _, err := os.Stat(path); err == nil {
+			return path
+		}
+	}
+
+	return filepath.Join("basics", "06_json_config", "config.json")
+}
+
+func main() {
+	configPath := defaultConfigPath()
+	config, err := LoadConfig(configPath)
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("Loaded config from %s: %+v\n", configPath, *config)
 }

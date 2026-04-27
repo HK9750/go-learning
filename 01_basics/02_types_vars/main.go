@@ -158,7 +158,7 @@ func main() {
 	fmt.Printf("map:       %v (nil: %t)\n", zeroMap, zeroMap == nil)
 	fmt.Printf("chan:      %v (nil: %t)\n", zeroChannel, zeroChannel == nil)
 	fmt.Printf("interface: %v (nil: %t)\n", zeroInterface, zeroInterface == nil)
-	fmt.Printf("func:      %v (nil: %t)\n", zeroFunc, zeroFunc == nil)
+	fmt.Printf("func:      %p (nil: %t)\n", zeroFunc, zeroFunc == nil)
 
 	// ⚠️ CRITICAL: nil map vs empty map
 	// Writing to a nil map causes a PANIC!
