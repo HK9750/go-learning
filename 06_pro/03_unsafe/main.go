@@ -11,15 +11,15 @@ import (
 // Risks: Segfaults, GC corruption, non-portable code.
 
 type Data struct {
-	Count int64   // 8 bytes
-	Flag  bool    // 1 byte
+	Count int64 // 8 bytes
+	Flag  bool  // 1 byte
 	// Padding: 7 bytes
 	Value float64 // 8 bytes
 }
 
 func main() {
 	d := Data{Count: 100, Flag: true, Value: 99.9}
-	
+
 	fmt.Printf("Original: %+v\n", d)
 
 	// 1. Getting size and alignment
@@ -28,45 +28,46 @@ func main() {
 
 	// 2. Pointer Arithmetic
 	// Access 'Value' field manually using offsets.
-	
+
 	// Start address of struct
 	startPtr := unsafe.Pointer(&d)
-	
+
 	// Offset of 'Value' field
 	offsetValue := unsafe.Offsetof(d.Value) // Should be 16
 	fmt.Println("Offsetof Value:", offsetValue)
-	
+
 	// Calculate address of 'Value'
 	// uintptr is an integer representation of a pointer (allows math).
 	// unsafe.Pointer is a void* (allows casting).
-	
+
 	valPtr := (*float64)(unsafe.Pointer(uintptr(startPtr) + offsetValue))
-	
+
 	// Read
 	fmt.Println("Read Value via unsafe:", *valPtr)
-	
+
 	// Write
 	*valPtr = 123.456
 	fmt.Printf("Modified via unsafe: %+v\n", d)
 
 	// 3. String to ByteSlice (Zero Allocation Cast)
-	// Typical conversion []byte(str) allocates memory. 
+	// Typical conversion []byte(str) allocates memory.
 	// This unsafe cast reuses the string's backing array correctly.
 	// CAUTION: Resulting slice MUST NOT be modified if string is read-only memory.
 	str := "Top Secret"
-	
+
 	// StringHeader (Internal structure)
 	// struct { Data uintptr; Len int }
-	
+
 	// SliceHeader (Internal structure)
 	// struct { Data uintptr; Len int; Cap int }
-	
+
 	nb := stringToBytes(str)
 	fmt.Printf("Zero-copy bytes: %v\n", nb)
 }
 
+// Unsafe conversion from string to []byte without allocation.
 func stringToBytes(s string) []byte {
-	// This is the "old way" (pre-Go 1.20). 
+	// This is the "old way" (pre-Go 1.20).
 	// Go 1.20+ provides unsafe.String and unsafe.Slice for safer usage.
 	return unsafe.Slice(unsafe.StringData(s), len(s))
 	return unsafe.Slice(unsafe.StringData(s), len(s))
