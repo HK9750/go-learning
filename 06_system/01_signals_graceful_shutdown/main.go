@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-// =========================================================================
+// ==========================================================================
 // SYSTEM: Graceful Shutdown
 // =========================================================================
 // Production apps must handle SIGINT (Ctrl+C) and SIGTERM (Kubernetes stops).
@@ -31,10 +31,10 @@ func main() {
 	// 1. Create a channel to listen for signals
 	// We use a buffered channel of size 1 to prevent blocking the signal sender
 	sigChan := make(chan os.Signal, 1)
-	
+
 	// 2. Register for SIGINT and SIGTERM
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-	
+
 	fmt.Println("App Started. Process ID:", os.Getpid())
 	fmt.Println("Waiting for SIGINT (Ctrl+C)...")
 
@@ -60,7 +60,7 @@ func main() {
 
 	// 6. Signal cleanup
 	cancel() // Tell workers to stop
-	
+
 	// Simulate cleanup time (e.g., closing DB connections)
 	time.Sleep(1 * time.Second)
 	fmt.Println("Cleanup Complete. Exiting.")
